@@ -2,7 +2,10 @@ const User = require("./User");
 const mongoose = require("mongoose");
 
 // Gérant
-const gerantSchema = new mongoose.Schema({ stationId: String });
+const gerantSchema = new mongoose.Schema({
+  stationId: String,
+  assistantId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+});
 const Gerant = User.discriminator("Gerant", gerantSchema);
 
 // Admin

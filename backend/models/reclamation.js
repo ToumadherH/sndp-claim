@@ -5,7 +5,7 @@ const reclamationSchema = new mongoose.Schema({
   status: { type: String, default: "En attente" },
   createDate: { type: Date, default: Date.now },
   gerantId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  technicienId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  IntervenantId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 module.exports=mongoose.model('Reclamation',reclamationSchema);

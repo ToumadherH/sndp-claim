@@ -1,27 +1,20 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./components/Login";
-import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./routes/ProtectedRoute";
+// App.tsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage"; 
 
-const App: React.FC = () => {
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<Login />} />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      {/* Exemple si tu veux un dashboard gérant à part */}
-      {/* <Route path="/dashboard-gerant" element={...} /> */}
-      <Route path="*" element={<div>404</div>} />
-    </Routes>
+    <Router>
+      <Routes>
+        {/* Route for landing page */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Route for login page */}
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
