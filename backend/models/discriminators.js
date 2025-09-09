@@ -17,7 +17,7 @@ const intervenantSchema = new mongoose.Schema({ mission: String });
 const Intervenant = User.discriminator("Intervenant", intervenantSchema);
 
 // Assistant
-const assistantSchema = new mongoose.Schema({ superviseurId: String });
+const assistantSchema = new mongoose.Schema({ });
 const Assistant = User.discriminator("Assistant", assistantSchema);
 
 module.exports = { Gerant, Admin, Intervenant, Assistant };

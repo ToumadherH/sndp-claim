@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const Reclamation = require("../models/reclamation"); //communiquer avec la base de données
-const { Gerant } = require("../models/User");
+const { Gerant } = require("../models/discriminators");
 
 const JWT_SECRET = process.env.JWT_SECRET || "mysecretkey";
 
@@ -27,7 +27,7 @@ const getAllReclamations = async (req, res) => {
   try {
     const reclamations = await Reclamation.find()
       .populate("gerantId")
-      .populate("technicienId");
+      .populate("intervenantId");
     res.status(200).json(reclamations);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -13,7 +13,8 @@ app.use(express.json()); //pour les requetes json
 const reclamationRoutes = require("./routes/reclamationRoutes");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
-
+const intervenantRoutes =require("./routes/intervenantRoutes");
+const gerantRoutes=require("./routes/gerantRoutes");
 //test
 
 //console.log("ReclamationRoutes =", reclamationRoutes);
@@ -21,6 +22,8 @@ const authRoutes = require("./routes/authRoutes");
 app.use("/api/reclamations", reclamationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/intervenant",intervenantRoutes);
+app.use("/api/gerant",gerantRoutes);
 //Connexion à la base de données
 mongoose
   .connect(process.env.MONGO_URI)
