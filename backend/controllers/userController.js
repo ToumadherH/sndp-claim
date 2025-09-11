@@ -4,7 +4,7 @@ const { Gerant, Admin, Intervenant, Assistant } = require("../models/discriminat
 
 const createUser = async (req, res) => {
   try {
-    const { email, password, role, extra } = req.body; // extra = champs spécifiques au type
+    const { name,email, password, role, extra } = req.body; // extra = champs spécifiques au type
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: "Email déjà utilisé" });
@@ -15,16 +15,16 @@ const createUser = async (req, res) => {
 
     switch (role) {
       case "Gerant":
-        user = new Gerant({ ...extra, email, password: hashedPassword });
+        user = new Gerant({ ...extra, name,email, password: hashedPassword });
         break;
       case "Admin":
-        user = new Admin({ ...extra, email, password: hashedPassword });
+        user = new Admin({ ...extra, name,email, password: hashedPassword });
         break;
       case "Intervenant":
-        user = new Intervenant({ ...extra, email, password: hashedPassword });
+        user = new Intervenant({ ...extra,name, email, password: hashedPassword });
         break;
       case "Assistant":
-        user = new Assistant({ ...extra, email, password: hashedPassword });
+        user = new Assistant({ ...extra,name, email, password: hashedPassword });
         break;
       default:
         return res.status(400).json({ error: "Role invalide" });
@@ -37,6 +37,7 @@ const createUser = async (req, res) => {
     res.status(500).json({ error: "Erreur de création de l'utilisateur" });
   }
 };
+
 
 const getAllUsers = async (req, res) => {
   try {

@@ -1,5 +1,6 @@
 const Reclamation = require("../models/reclamation");
-
+const User = require("../models/User");
+const Gerant = require("../models/discriminators");
 
 exports.getMyReclamations = async (req, res) => {
   try {
@@ -70,3 +71,37 @@ exports.rejectResolution = async (req, res) => {
     res.status(500).json({ error: "Error rejecting reclamation" });
   }
 };
+
+
+
+exports.getGerantProfile = async (req, res) => {
+  try {
+    console.log("Authenticated user ID:", req.user._id); // Debug
+    
+    const gerantId = req.user._id;
+    
+    // Use lean() for better performance and check if data exists
+    const gerant = await User.findById(gerantId)
+      .select("name stationId role")
+      .lean();
+    
+    console.log("Database result:", gerant); // Debug
+    
+    if (!gerant) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    if (gerant.role !== "Gerant") {
+      return res.status(403).json({ error: "Access denied - Not a Gerant" });
+    }
+
+    res.json({
+      name: gerant.name,
+      stationId: gerant.stationId,
+    });
+  } catch (error) {
+    console.error("Error fetching gerant profile:", error);
+    res.status(500).json({ error: "Server error", details: error.message });
+  }
+};
+
