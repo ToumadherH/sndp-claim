@@ -15,6 +15,7 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const intervenantRoutes =require("./routes/intervenantRoutes");
 const gerantRoutes=require("./routes/gerantRoutes");
+const assistantRoutes=require("./routes/assistantRoutes");
 //test
 
 //console.log("ReclamationRoutes =", reclamationRoutes);
@@ -24,6 +25,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/intervenant",intervenantRoutes);
 app.use("/api/gerant",gerantRoutes);
+app.use("/api/assistant",assistantRoutes);
 //Connexion à la base de données
 mongoose
   .connect(process.env.MONGO_URI)

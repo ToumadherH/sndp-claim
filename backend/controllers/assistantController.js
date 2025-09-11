@@ -1,6 +1,7 @@
 // controllers/assistantController.js
 const Reclamation = require("../models/reclamation");
 const { Gerant, Intervenant } = require("../models/discriminators");
+const Alert = require("../models/alert");
 
 // Get all reclamations submitted by gerants of this assistant
 exports.getReclamationsForAssistant = async (req, res) => {
@@ -55,5 +56,30 @@ exports.assignReclamationToIntervenant = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error assigning reclamation" });
+  }
+};
+
+exports.getAlertsForAssistant = async (req, res) => {
+  try {
+    const assistantId = req.user.id; // from JWT
+    const alerts = await Alert.find({ assistantId })
+                              .populate("gerantId", "name email")
+                              .sort({ createdAt: -1 });
+    res.json({
+      count: alerts.length,
+      alerts
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching alerts" });
+  }
+};
+
+exports.markAlertAsRead = async (req, res) => {
+  try {
+    const { alertId } = req.body;
+    const alert = await Alert.findByIdAndUpdate(alertId, { read: true }, { new: true });
+    res.json(alert);
+  } catch (err) {
+    res.status(500).json({ error: "Error updating alert" });
   }
 };
