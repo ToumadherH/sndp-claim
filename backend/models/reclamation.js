@@ -1,7 +1,17 @@
 const mongoose = require("mongoose");
 
 const reclamationSchema = new mongoose.Schema({
-  type: { type: String, required: true },
+  type: {
+    type: String,
+    enum: [
+      "Fuel Shortage",
+      "Pump Issue",
+      "Cash Register Problem",
+      "Electricity Failure",
+      "Maintenance Request",
+    ], //types possibles
+    required: true,
+  },
   status: {
     type: String,
     enum: ["Pending", "In Progress", "Resolved", "Rejected", "Closed"],

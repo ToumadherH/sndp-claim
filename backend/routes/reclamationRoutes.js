@@ -5,7 +5,7 @@ const {
   getAllReclamations,
 } = require("../controllers/reclamationController");
 const {getReclamationsForAssistant,assignReclamationToIntervenant}=require("../controllers/assistantController");
-const authMiddleware = require("../middleware/authMiddleware");
+const {authMiddleware} = require("../middleware/authMiddleware");
 
 router.post("/", authMiddleware,createReclamation);
 router.get("/",authMiddleware,getAllReclamations);
