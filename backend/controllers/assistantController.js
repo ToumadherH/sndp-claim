@@ -2,6 +2,7 @@
 const Reclamation = require("../models/reclamation");
 const { Gerant, Intervenant } = require("../models/discriminators");
 const Alert = require("../models/alert");
+const {Assistant} = require("../models/discriminators");
 
 // Get all reclamations submitted by gerants of this assistant
 exports.getReclamationsForAssistant = async (req, res) => {
@@ -38,7 +39,7 @@ exports.assignReclamationToIntervenant = async (req, res) => {
       reclamationId,
       {
         intervenantId,
-        status: "In progress", 
+        status: "In progress",
       },
       { new: true }
     )
@@ -63,11 +64,11 @@ exports.getAlertsForAssistant = async (req, res) => {
   try {
     const assistantId = req.user.id; // from JWT
     const alerts = await Alert.find({ assistantId })
-                              .populate("gerantId", "name email")
-                              .sort({ createdAt: -1 });
+      .populate("gerantId", "name email")
+      .sort({ createdAt: -1 });
     res.json({
       count: alerts.length,
-      alerts
+      alerts,
     });
   } catch (err) {
     res.status(500).json({ error: "Error fetching alerts" });
@@ -77,9 +78,29 @@ exports.getAlertsForAssistant = async (req, res) => {
 exports.markAlertAsRead = async (req, res) => {
   try {
     const { alertId } = req.body;
-    const alert = await Alert.findByIdAndUpdate(alertId, { read: true }, { new: true });
+    const alert = await Alert.findByIdAndUpdate(
+      alertId,
+      { read: true },
+      { new: true }
+    );
     res.json(alert);
   } catch (err) {
     res.status(500).json({ error: "Error updating alert" });
+  }
+};
+
+exports.getAssistantProfile = async (req, res) => {
+  try {
+    // req.user.id vient du middleware d'auth (authMiddleware)
+    const assistant = await Assistant.findById(req.user.id).select("name _id");
+
+    if (!assistant) {
+      return res.status(404).json({ error: "Assistant not found" });
+    }
+
+    res.json(assistant);
+  } catch (error) {
+    console.error("Error fetching assistant profile:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };

@@ -69,7 +69,7 @@ const GerantDashboard: React.FC = () => {
 
       {/* Content */}
       <main className="flex-1 p-6">
-        <h1 className="text-5xl font-bold">Gerant Dashboard</h1>
+        <h1 className="text-5xl font-bold">Manager Dashboard</h1>
         <p className="mt-2 text-gray-400">
           Welcome back {" "}
           <span className="font-semibold">{profile?.name || "Loading..."}</span>

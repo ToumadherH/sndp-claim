@@ -80,7 +80,7 @@ exports.getGerantProfile = async (req, res) => {
     
     const gerantId = req.user._id;
     
-    // Use lean() for better performance and check if data exists
+    
     const gerant = await User.findById(gerantId)
       .select("name stationId role")
       .lean();

@@ -1,4 +1,5 @@
 const Reclamation = require("../models/reclamation");
+const {Intervenant}=require("../models/discriminators");
 
 //Get all reclamations assigned to a specific intervenant
 exports.getReclamationsForIntervenant = async (req, res) => {
@@ -50,5 +51,15 @@ exports.updateReclamationStatus = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error updating reclamation status" });
+  }
+};
+
+exports.getAllIntervenants = async (req, res) => {
+  try {
+    const intervenants = await Intervenant.find().select("_id name");
+    res.json(intervenants);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 };

@@ -57,4 +57,28 @@ const deleteAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getAllUsers, deleteAllUsers };
+const updateUserName = async (req, res) => {
+  try {
+    const { userId, name } = req.body;
+
+    if (!userId || !name) {
+      return res.status(400).json({ error: "userId and name are required" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { name },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ message: "Name updated successfully", user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update user name" });
+  }
+};
+module.exports = { createUser, getAllUsers, deleteAllUsers ,updateUserName};
