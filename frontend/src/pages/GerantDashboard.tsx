@@ -12,6 +12,7 @@ interface GerantProfile {
 const GerantDashboard: React.FC = () => {
   const [profile, setProfile] = useState<GerantProfile | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchProfile = async () => {
     try {
@@ -28,6 +29,11 @@ const GerantDashboard: React.FC = () => {
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  const handleReclamationCreated = () => {
+    // bump key to re-render ReclamationsTable and trigger fetch
+    setRefreshKey((prev) => prev + 1);
+  };
 
   return (
     <div className="min-h-screen bg-gray-700 text-white flex flex-col">
@@ -71,7 +77,7 @@ const GerantDashboard: React.FC = () => {
         <p className="mt-1 text-gray-400">
           Station ID: <span className="font-semibold">{profile?.stationId}</span>
         </p>
-        <ReclamationsTable/>
+        <ReclamationsTable key={refreshKey}/>
         {/* Create Reclamation Button */}
         <div className="mt-6">
           <button
@@ -87,9 +93,7 @@ const GerantDashboard: React.FC = () => {
       <CreateReclamationModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onCreated={() => {
-          console.log("Reclamation created, refresh data later here!");
-        }}
+        onCreated={handleReclamationCreated}
       />
     </div>
   );

@@ -29,7 +29,7 @@ const Login = () => {
     localStorage.setItem("token", token);
     localStorage.setItem("role", role);
 
-    alert("Login successful!");
+    //alert("Login successful!");
 
     // Redirect based on role
     switch (role) {
