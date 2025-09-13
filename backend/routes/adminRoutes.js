@@ -4,7 +4,7 @@ const {authMiddleware, requireRole} = require("../middleware/authMiddleware");
 const { changeAssistantForGerant, changeStationForGerant } = require("../controllers/adminController");
 
 // Only Admin can do this (authMiddleware should check role === "Admin")
-router.put("/gerant/change-assistant", authMiddleware, requireRole("Admin"), changeAssistantForGerant);
-router.put("/gerant/change-station", authMiddleware, requireRole("Admin"), changeStationForGerant);
+router.put("/change-assistant", authMiddleware, requireRole("Admin"), changeAssistantForGerant);
+router.put("/change-station", authMiddleware, requireRole("Admin"), changeStationForGerant);
 
 module.exports = router;

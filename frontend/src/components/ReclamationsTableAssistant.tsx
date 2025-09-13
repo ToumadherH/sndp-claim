@@ -7,7 +7,10 @@ interface Reclamation {
   type: string;
   status: "Pending" | "In Progress" | "Resolved" | "Rejected" | "Closed";
   createDate: string;
-  gerantId: { name: string }; // populate côté backend
+  gerantId: {
+    stationId: string; name: string 
+}; // populate côté backend
+  stationId?: string; // <-- ajouté
 }
 
 interface Intervenant {
@@ -60,7 +63,7 @@ const ReclamationsTableAssistant: React.FC<Props> = ({ assistantId }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get<Intervenant[]>(
-        "http://localhost:8000/api/intervenant/intervenants", // <-- ton endpoint à vérifier
+        "http://localhost:8000/api/intervenant/intervenants",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setIntervenants(res.data);
@@ -105,6 +108,7 @@ const ReclamationsTableAssistant: React.FC<Props> = ({ assistantId }) => {
               <th className="px-4 py-3 text-left">Status</th>
               <th className="px-4 py-3 text-left">Date</th>
               <th className="px-4 py-3 text-left">Actions</th>
+              <th className="px-4 py-3 text-left">Station ID</th> {/* new column */}
             </tr>
           </thead>
           <tbody>
@@ -161,12 +165,15 @@ const ReclamationsTableAssistant: React.FC<Props> = ({ assistantId }) => {
                     </div>
                   )}
                 </td>
+                <td className="px-4 py-3 text-gray-200">
+                  {rec.gerantId?.stationId || "N/A"}
+                </td>
               </tr>
             ))}
             {reclamations.length === 0 && (
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6} // <-- mis à jour
                   className="text-center py-4 text-gray-400 italic"
                 >
                   No reclamations found.

@@ -106,7 +106,7 @@ const Notifications: React.FC = () => {
                       : "bg-gray-900 hover:bg-gray-800"
                   }`}
                 >
-                  {`${alert.gerantId?.email || "Unknown gerant"} has created ${
+                  {`${alert.gerantId?.name || "Unknown gerant"} has created ${
                     alert.count
                   } reclamations of type "${alert.type}"`}
                 </li>
