@@ -10,7 +10,7 @@ interface Reclamation {
   gerantId: {
     stationId: string; name: string 
 }; // populate côté backend
-  stationId?: string; // <-- ajouté
+  stationId?: string; 
 }
 
 interface Intervenant {

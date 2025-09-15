@@ -1,0 +1,79 @@
+// src/pages/IntervenantDashboard.tsx
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import ReclamationsTableIntervenant from "../components/ReclamationsTableIntervenant";
+import logoAgil from "../assets/logoagil.png";
+
+
+interface IntervenantProfile {
+  name: string;
+  _id: string; // needed for requests
+}
+
+const IntervenantDashboard: React.FC = () => {
+  const [profile, setProfile] = useState<IntervenantProfile | null>(null);
+
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:8000/api/intervenant/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setProfile(res.data);
+    } catch (err) {
+      console.error("Failed to fetch intervenant profile:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gray-700 text-white flex flex-col">
+      {/* Header */}
+      <header className="flex justify-between items-center p-4 bg-gray-600 shadow">
+        <div className="text-xl font-bold">
+          <img src={logoAgil} alt="SNDP Logo" className="w-12" />
+        </div>
+        <button
+          className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-full text-lg shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+          onClick={() => {
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+            />
+          </svg>
+          Log Out
+        </button>
+      </header>
+      {/* Content */}
+      <main className="flex-1 p-6">
+        <h1 className="text-5xl font-bold">Intervenant Dashboard</h1>
+        <p className="mt-3 text-gray-400">
+          Welcome back{" "}
+          <span className="font-semibold">{profile?.name || "Loading..."}</span>
+        </p>
+        {/* Table of Reclamations */}
+        {profile && (
+          <ReclamationsTableIntervenant intervenantId={profile._id} />
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default IntervenantDashboard;

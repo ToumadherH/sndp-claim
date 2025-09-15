@@ -2,59 +2,57 @@ import React, { useState } from "react";
 import logoAgil from "../assets/logoagil.png";
 import bg from "../assets/agil1.jpg";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";  // ✅ import navigation hook
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate(); // ✅ initialize navigation
 
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!email || !password) {
-    alert("Please fill in all fields");
-    return;
-  }
-
-  setIsLoading(true);
-  try {
-    const res = await axios.post("http://localhost:8000/api/auth/login", {
-      email,
-      password,
-    });
-
-    const { token, role } = res.data;
-
-    // Save token + role in localStorage
-    localStorage.setItem("token", token);
-    localStorage.setItem("role", role);
-
-    //alert("Login successful!");
-
-    // Redirect based on role
-    switch (role) {
-      case "Gerant":
-        window.location.href = "/dashboard-gerant";
-        break;
-      case "Intervenant":
-        window.location.href = "/dashboard-intervenant";
-        break;
-      case "Assistant":
-        window.location.href = "/dashboard-assistant";
-        break;
-      case "Admin":
-        window.location.href = "/dashboard-admin";
-        break;
-      default:
-        alert("Unknown role, please contact support.");
-        break;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      alert("Please fill in all fields");
+      return;
     }
-  } catch (err: any) {
-    alert(err.response?.data?.error || "Invalid credentials. Try again.");
-  } finally {
-    setIsLoading(false);
-  }
-};
+
+    setIsLoading(true);
+    try {
+      const res = await axios.post("http://localhost:8000/api/auth/login", {
+        email,
+        password,
+      });
+
+      const { token, role } = res.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+
+      switch (role) {
+        case "Gerant":
+          window.location.href = "/dashboard-gerant";
+          break;
+        case "Intervenant":
+          window.location.href = "/dashboard-intervenant";
+          break;
+        case "Assistant":
+          window.location.href = "/dashboard-assistant";
+          break;
+        case "Admin":
+          window.location.href = "/dashboard-admin";
+          break;
+        default:
+          alert("Unknown role, please contact support.");
+          break;
+      }
+    } catch (err: any) {
+      alert(err.response?.data?.error || "Invalid credentials. Try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex bg-gradient-to-r from-yellow-400 to-gray-900">
@@ -89,19 +87,14 @@ const Login = () => {
                 >
                   Email Address
                 </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i className="fas fa-envelope text-gray-400"></i>
-                  </div>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-3 py-3 rounded-lg border border-gray-300 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-200 transition-colors"
-                    placeholder="you@gmail.com"
-                  />
-                </div>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-3 pr-3 py-3 rounded-lg border border-gray-300 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-200 transition-colors"
+                  placeholder="you@gmail.com"
+                />
               </div>
 
               {/* Password field */}
@@ -112,22 +105,17 @@ const Login = () => {
                 >
                   Password
                 </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i className="fas fa-lock text-gray-400"></i>
-                  </div>
-                  <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-3 py-3 rounded-lg border border-gray-300 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-200 transition-colors"
-                    placeholder="••••••"
-                  />
-                </div>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-3 pr-3 py-3 rounded-lg border border-gray-300 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-200 transition-colors"
+                  placeholder="••••••"
+                />
               </div>
 
-              {/* Remember me checkbox */}
+              {/* Remember me */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
                   <input
@@ -152,33 +140,16 @@ const Login = () => {
                 disabled={isLoading}
                 className="w-full bg-gray-900 text-white py-3 px-4 rounded-lg font-bold hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 mb-4 transition-all duration-300 disabled:opacity-75 disabled:cursor-not-allowed"
               >
-                {isLoading ? (
-                  <span className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Logging in...
-                  </span>
-                ) : (
-                  "Login"
-                )}
+                {isLoading ? "Logging in..." : "Login"}
+              </button>
+
+              {/* Go Back button */}
+              <button
+                type="button"
+                onClick={() => navigate("/")}
+                className="w-full bg-gray-300 text-gray-900 py-3 px-4 rounded-lg font-bold hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mb-4 transition-all duration-300"
+              >
+                Go Back
               </button>
 
               {/* Forgot password */}
@@ -193,15 +164,14 @@ const Login = () => {
             </form>
           </div>
 
-          {/* Additional info */}
+          {/* Support */}
           <div className="text-center mt-8">
             <p className="text-sm text-gray-700">
-              Need help? Contact our support team at
+              Need help? Contact our support team at{" "}
               <a
                 href="mailto:support@sndp.com"
                 className="text-yellow-700 font-medium"
               >
-                {" "}
                 boc@agil.com.tn
               </a>
             </p>

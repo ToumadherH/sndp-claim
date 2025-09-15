@@ -7,7 +7,7 @@ exports.getReclamationsForIntervenant = async (req, res) => {
     const intervenantId = req.user.id; // from JWT
 
     const reclamations = await Reclamation.find({ intervenantId })
-      .populate("gerantId", "email") // you can add stationId or name if needed
+      .populate("gerantId", "name stationId email") // you can add stationId or name if needed
       .sort({ createDate: -1 });
 
     res.json(reclamations);
@@ -61,5 +61,22 @@ exports.getAllIntervenants = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
+  }
+};
+// Get intervenant profile
+exports.getIntervenantProfile = async (req, res) => {
+  try {
+    // req.user is set by authMiddleware after verifying the token
+    const intervenantId = req.user.id;
+
+    const intervenant = await Intervenant.findById(intervenantId).select("name _id");
+    if (!intervenant) {
+      return res.status(404).json({ error: "Intervenant not found" });
+    }
+
+    res.json(intervenant);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching intervenant profile" });
   }
 };

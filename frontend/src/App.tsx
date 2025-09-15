@@ -4,18 +4,17 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage"; 
 import GerantDashboard from "./pages/GerantDashboard";
 import AssistantDashboard from "./pages/AssistantDashboard";
+import IntervenantDashboard from "./pages/IntervenantDashboard";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Route for landing page */}
         <Route path="/" element={<LandingPage />} />
-
-        {/* Route for login page */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard-gerant" element={<GerantDashboard/>}/>
         <Route path="/dashboard-assistant" element={<AssistantDashboard/>}/>
+        <Route path="/dashboard-intervenant" element={<IntervenantDashboard/>}/>
       </Routes>
     </Router>
   );
