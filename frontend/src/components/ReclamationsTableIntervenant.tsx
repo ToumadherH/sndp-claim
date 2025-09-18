@@ -30,7 +30,7 @@ const ReclamationsTableIntervenant: React.FC = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:8000/api/my-reclamations", {
+      const res = await axios.get("http://localhost:8000/api/intervenant/my-reclamations", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReclamations(res.data);
@@ -45,7 +45,7 @@ const ReclamationsTableIntervenant: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        "http://localhost:8000/api/update-status",
+        "http://localhost:8000/api/intervenant/update-status",
         { reclamationId: id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
